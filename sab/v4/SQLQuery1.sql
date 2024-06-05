@@ -1,0 +1,1 @@
+Drop database Proba2Izmenjeno
