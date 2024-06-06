@@ -251,3 +251,127 @@ def application(environ, start_response):
     # Ključ pod kojim se na serveru dohvata informacija o metodu HTTP zahteva
     # Međutim, to se prosleđuje kao niz bajtova, pa je zato neophodno znati koliko bajtova je potrebno pročitati.
 ```
+
+# Napredni primer web aplikacije
+
+```python
+import re
+
+def application(environ, start_response):
+    path = environ["PATH_INFO"]
+    method = environ["REQUEST_METHOD"]
+
+    if method == "POST":
+        # Čitanje veličine tela zahteva
+        request_body_size = int(environ['CONTENT_LENGTH'])
+        # Čitanje sirovih podataka tela zahteva
+        request_body_raw = environ['wsgi.input'].read(request_body_size).decode('utf-8')
+        # Konvertovanje sirovih podataka tela zahteva u rečnik
+        request_body = dict(re.findall(r'([^=.]+)=([^=.]+)(?:&|$)', request_body_raw))
+        
+        # Mapiranje ruta na HTML fajlove
+        routes = {
+            '/': "index.html",
+            '/results': "results.html"
+        }
+        
+        try:
+            # Učitavanje odgovarajućeg HTML fajla za traženu putanju
+            with open(routes[path], "r") as f:
+                response = f.read().encode()
+            status = "200 OK"
+        except KeyError:
+            # Obrada slučaja gde tražena putanja nije pronađena
+            response = b"<h1>Not Found</h1><p>Entered path not found</p>"
+            status = "404 Not Found"
+
+        headers = [
+            ("Content-Type", "text/html"),
+            ("Content-Length", str(len(response)))
+        ]
+        start_response(status, headers)
+
+        if path == '/results':
+            # Priprema podataka za stranicu rezultata
+            data = dict()
+            data['proizvod'] = request_body['proizvodi']
+            data['num'] = request_body['broj']
+            response = response.format(**data).encode()
+        
+        return [response]
+
+# Konvertovanje sirovog tela zahteva u rečnik
+# Korišćenje regex-a za izdvajanje parova ključ-vrednost iz stringa tela zahteva
+request_body = dict(re.findall(r'([^=.]+)=([^=.]+)(?:&|$)', request_body_raw))
+# Regex izdavaja stringove pre i posle '=' i razdvaja ih '&' ili krajem stringa.
+# Ovo će biti svi parovi polja u formi i njihovih vrednosti.
+# Primer: 'proizvodi=p1&broj=1' prevodi se u {'proizvodi': 'p1', 'broj': '1'}
+```
+
+## Mapiranje Ruta i Služenje HTML Fajlova
+
+1. **Mapiranje rute i stranice koja se vraća korisniku**:
+2. **Dinamičko generisanje HTML sadržaja na osnovu parametara**:
+
+```python
+try:
+    with open(routes[path], "r") as f:
+        response = f.read().encode()
+    status = "200 OK"
+except KeyError:
+    response = b"<h1>Not Found</h1><p>Entered path not found</p>"
+    status = "404 Not Found"
+
+headers = [
+    ("Content-Type", "text/html"),
+    ("Content-Length", str(len(response)))
+]
+start_response(status, headers)
+return [response]
+
+# Učitavanje HTML sadržaja iz fajla dinamički i integrisanje prosleđenih parametara.
+# Obrada ruta i odgovarajućih HTML fajlova korišćenjem rečnika.
+routes = {
+    '/': "index.html",
+    '/results': "results.html"
+}
+```
+
+## Dinamičko Ubacivanje Sadržaja u HTML
+
+- **Ukoliko ne postoji ključ u routes-u, dešava se izuzetak**:
+- **Sadržaj ne treba učitavati predefinisano kao ovde iz fajla, već nekako “uglaviti” prosleđene parametre**:
+
+```python
+response = response.format(**data)
+# 'data' argument predstavlja sadržaj u formi rečnika koji treba da se prosledi stringu koji se formatira (u ovom slučaju, HTML stranici).
+```
+
+## Primer HTML Stranice (results.html)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Results</title>
+    </head>
+    <body>
+        <h1>Second Page! {proizvod} </h1>
+        <p> Number: {num} </p>
+    </body>
+</html>
+```
+
+- **Stvari koje stoje u `{ }` su zamišljene da budu zamenjene odgovarajućim vrednostima prosleđenog rečnika putem format metode**:
+
+```python
+data = dict()
+data['proizvod'] = request_body['proizvodi']
+data['num'] = request_body['broj']
+response = response.format(**data)
+
+# Priprema rečnika na osnovu strukture results.html
+# Ključevi 'proizvod' i 'num' moraju biti obezbeđeni u rečniku za formatiranje.
+```
+
