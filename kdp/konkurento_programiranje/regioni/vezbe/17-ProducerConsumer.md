@@ -1,5 +1,7 @@
-// Regioni uslovna sisnhronizacija
+# Regioni uslovna sisnhronizacija
+    Producer-consumer problem.
 
+```cpp
 const int N = 100;
 struct Point {
     int x = 0;
@@ -31,3 +33,5 @@ void printPoints(){
     }
     
 }
+
+```
