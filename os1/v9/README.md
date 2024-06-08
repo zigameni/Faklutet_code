@@ -9,41 +9,17 @@ Lista predmeta:
 
 - [x] Zadatak 1. (sep14k3-1)
 - [x] Zadatak 2. (sep16k3-1)
-- [ ] Zadatak 3. (jun14k3-1)
-- [ ] Zadatak 4. (jun15k3-1)
-- [ ] Zadatak 5. (jun2019k1-1)
-- [ ] Zadatak 6. (jun2012k1-1)
+- [x] Zadatak 3. (jun14k3-1)
+- [x] Zadatak 4. (jun15k3-1)
+- [x] Zadatak 5. (jun2019k1-1)
+- [x] Zadatak 6. (jun2012k1-1)
 - [ ] Zadatak 7. (sep14k1-1)
 - [ ] Zadatak 8. (apr14k1-1)
 - [ ] Zadatak 9. (sep15k1-1)
 
 ---
 
-### Zadatak 1. (sep14k3-1)
 
-Dat je neki sekvencijalni, blokovski orijentisani ulazni uređaj sa koga se blok znakova veličine `BlockSize` učitava na zadatu adresu funkcijom:
-```cpp
-void readBlock(char* addr);
-```
-Od ovog uređaja napraviti apstrakciju sekvencijalnog, znakovno orijentisanog ulaznog uređaja (ulazni tok), odnosno realizovati funkciju koja učitava znak po znak sa tog uređaja:
-```cpp
-char getchar();
-```
-Ignorisati sve greške.
-
-```cpp
-char getchar() {
-    static char buffer[BlockSize];
-    static int cursor = BlockSize;
-    if (cursor == BlockSize) {
-        readBlock(buffer);
-        cursor = 0;
-    }
-    return buffer[cursor++];
-}
-```
-
----
 
 ### Zadatak 2. (sep16k3-1)
 
