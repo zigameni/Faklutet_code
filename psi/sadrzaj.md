@@ -10,6 +10,7 @@
 
 ### Vezbe
 - [ ] V6 - veb server
+  - [ ] 
 - [ ] V7 - veb server
 - [ ] V8 - veb server
 

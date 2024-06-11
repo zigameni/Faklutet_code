@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+</head>
+<body>
+    <form action="/results" method="post">
+        <select name="proizvodi">
+            {proizvodi}
+        </select>
+
+        <input type="number" name="broj">
+
+        <input type="submit" name="Dodaj u korpu">
+    </form>
+
+    <a href="/view-add-proizvod">Dodaj proizvod!</a>
+    <a href="/view-cart">Pregled korpe</a>
+</body>
+</html>
