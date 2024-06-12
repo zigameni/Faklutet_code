@@ -7,7 +7,7 @@
 - Structured Stream Programming
 - Queries on Streams
 
-## Spark
+## Apache Spark
 
 The Apache Spark software library provides a framework for distributed processing of large data sets using clusters of computers and a simple programming model. It allows applications to scale based on the available hardware, whether it's a single server or a large number of servers each with local storage. Spark offers an interface for programming clusters with implicit data parallelism and fault tolerance.
 
@@ -48,7 +48,7 @@ Hadoop MapReduce is a programming model for processing large data sets with para
 
 - The core of Spark's architecture was developed to address limitations in the Apache Hadoop MapReduce solution by processing data in memory. This reduces the number of job steps and reuses data across multiple parallel operations. Data is loaded into memory, operations are executed, and results are returned, significantly reducing latency in such applications. Data reuse is achieved by creating resilient distributed datasets (RDDs), which are collections of objects that are cached in memory and reused in multiple operations.
 
-### Spark
+### Spark apache
 
 - The architecture is based on using datasets whose elements can only be read, and these elements are distributed across multiple computers with fault tolerance in mind.
 - Unlike the two-stage execution process in the Hadoop MapReduce architecture, Spark processes data using a directed acyclic graph (DAG) for task scheduling and worker node orchestration across the cluster. Nodes in the graph represent datasets, while edges represent operations on these datasets.
@@ -149,7 +149,7 @@ public <T> JavaRDD<T> parallelize(List<T> list, int numSlices)
 
 - The method accepts a file URI (local path, hdfs://, s3a://, etc.) and reads it as a collection of lines. The text file must be UTF-8 encoded.
 
-#### Methods
+#### Java Methods
 
 ```java
 public JavaRDD<String> textFile(String path)
@@ -290,4 +290,3 @@ System.out.println(totalLength);
 | `union(otherDataset)`| Returns the union of two datasets                  |
 | `intersection(otherDataset)`| Returns the intersection of two datasets   |
 | `distinct([numPartitions])` | Eliminates duplicates using equals          |
-...
