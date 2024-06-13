@@ -84,11 +84,11 @@ The fourth item in the main menu is "Food Delivery." Here, the guest is shown al
 
 After successfully logging into the system, the waiter has a main menu consisting of the items described below.
 
-### Profile
+### Profile_
 
 The first item in the main menu is "Profile," and this is the page that should be displayed first after logging into the system. Within the profile, the waiter can see their basic data - first name, last name, address, email address, contact phone, and can update all their data. It is also necessary to allow updating the profile picture.
 
-### Reservations
+### Reservations_
 
 The second item in the main menu is "Reservations." Within this item, the waiter sees all unprocessed reservations for that restaurant, sorted from the most recent to the oldest. Next to each unprocessed reservation, the waiter sees a button and can either confirm or reject it (with a mandatory comment for the rejection). If the reservation was made through the interactive panel, the waiter sees the table chosen by the guest on the panel with the table layout, colored yellow, and upon confirmation of the reservation, the table becomes occupied and red. If the reservation is rejected, the table turns white
 
@@ -106,7 +106,7 @@ The fourth item in the main menu is "Current Orders." Within this item, the wait
 
 After successfully logging into the system, the administrator has a main menu consisting of the items described below.
 
-### Profile_
+### Profile__
 
 The first item in the main menu is "Profile," and this is the page that should be displayed first after logging into the system. Within the profile, the administrator can see their basic data - first name, last name, address, email address, contact phone, and can update all their data. It is also necessary to allow updating the profile picture.
 
@@ -143,5 +143,3 @@ This project should be implemented using appropriate web technologies, ensuring 
 - University of Belgrade, School of Electrical Engineering
 - Department of Computer Engineering and Informatics
 - Academic Year: 2023/24
-
----
