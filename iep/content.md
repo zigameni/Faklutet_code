@@ -1,22 +1,17 @@
 # [IEP] Infrastruktura za elektronsko poslovanje
 
-### K2 
+## K2
 
-Hadoop-Spark_instalacija.zip
-Hadoop-Spark_instalacija_Readme.txt
-IEP-Spark_2024_04_08.pdf
-Spark2024-04-08.zip
+- [x] Hadoop-Spark_instalacija.zip
+- [x] Hadoop-Spark_instalacija_Readme.txt - steps for installation
+- [ ] IEP-Spark_2024_04_08.pdf - Presentation of Spark
+- [x] Spark2024-04-08.zip - contains code
 
+## K3
 
+## Lab 1
 
-
-### K3 
-
-
-### Lab 1
-
-
-### Lab 2
+## Lab 2
 
 
 IEP_K1_1920-1.pdf
