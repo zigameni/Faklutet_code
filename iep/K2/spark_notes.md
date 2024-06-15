@@ -38,4 +38,13 @@ There are two ways to create these datasets:
 - Parallelizing an existing collection
 - Referencing a dataset in an external storage system, such as a shared file system, HDFS, HBase, or any data source that offers Hadoop InputFormat.
 
+### ReduceByKey
 
+In Apache Spark, the reduceByKey transformation is used to aggregate values by key in a pair RDD (Resilient Distributed Dataset), which is essentially an RDD of key-value pairs. This transformation merges the values for each key using an associative and commutative reduce function specified by the user.
+
+Here's a more detailed explanation of how reduceByKey works:
+
+- `Grouping by Key`: It groups all values associated with the same key.
+- `Reducing Values`: It then applies the provided reduce function to the values of each key, combining them into a single value.
+  
+  
