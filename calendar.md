@@ -5,7 +5,7 @@
 ### 19th (Wednesday)
 
 - [ ] IOA Study
-- [ ] IEP LAB Study
+- [ ] IEP LAB Study, Docker 
 - [ ] RM2 Study
 - [ ] KDP Study
 
