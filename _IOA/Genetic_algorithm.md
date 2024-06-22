@@ -123,3 +123,6 @@ This template allows you to plug in different objective functions and adjust par
 ### Conclusion
 
 The genetic algorithm provides a powerful approach to optimization, suitable for a wide range of problems including finding both the minimum and maximum of functions. By carefully tuning parameters like population size, crossover rate, and mutation rate, you can effectively apply this algorithm to various optimization tasks.
+
+
+zip(population, fitness_scores) pairs each individual with its corresponding fitness score, creating a list of tuples where each tuple contains an individual and its fitness score.
