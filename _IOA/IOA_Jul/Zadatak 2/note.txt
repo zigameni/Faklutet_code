@@ -1,0 +1,1 @@
+Nije koriscen optimizacioni algoritam za određivanje Pareto Front, vec jednostavan metod za identifikaciju tacaka na Pareto front zasnovan na dominantnim odnosima izmedju tacaka u prostoru ciljnih funkcija.

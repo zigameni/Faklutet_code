@@ -1,0 +1,12 @@
+Zadatak 1. 
+V)
+
+R1: ≈ 5.00 Ohms
+R2: ≈ 10.00 Ohms
+L:  ≈ 7.00e-06 H
+C:  ≈ 7.07e-09 F
+Optimization Function Value: ≈ 0.000017586
+
+G) 
+ima samo graph. 
+
