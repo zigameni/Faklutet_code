@@ -1,3 +1,5 @@
+# Script to remove programming dirs after I am done. 
+
 import os
 import shutil
 
