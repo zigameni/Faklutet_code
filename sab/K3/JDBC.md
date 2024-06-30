@@ -270,40 +270,292 @@ JDBC, which stands for Java Database Connectivity, is an API (Application Progra
 
     ```
 
+### 5. This example shows how to insert data into a table and retrieve automatically generated keys
 
-- [x] Testing connection
+- dodaj Trzni Centar Sa Automatski Generisanim ID
+    ```java
+    package vezbe_jdbc_8;
+    /**
+    *
+    * @author ziga
+    */
 
-- [x] ispisRadnika
+    import java.sql.*;
+    import java.util.logging.Level;
+    import java.util.logging.Logger;
+
+    public class Primer5 {
+        
+        public static void main(String[] args) {
+            dodajTrzniCentarSaAutomatskiGenerisanimID("TrzniCentar 7", 
+                    "09:00-21:00", 
+                    8,
+                    456.54,
+                    "Beograd",
+                    "Vojvode Stepe", 
+                    "39");
+        }
+
+        private static void dodajTrzniCentarSaAutomatskiGenerisanimID(
+                String ime, 
+                String vreme, 
+                int brojSpratova,
+                double povrsina,
+                String grad, 
+                String ulica, 
+                String broj
+        ) {
+            Connection conn = DB.getInstance().getConnection();
+            if(conn == null) System.out.println("Connection could not be made!");
+            else System.out.println("Connection established!");
+
+            String query = "INSERT into TrzniCentar (Naziv, RadnoVreme, BrojSpratova, PovrsinaSprata," +
+                    "Grad, Ulica, Broj) values(?, ?, ?, ?, ?, ?, ?)";
+
+            
+            try (PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)){
+                ps.setString(1, ime);
+                ps.setString(2, vreme);
+                ps.setInt(3, brojSpratova);
+                ps.setDouble(4, povrsina);
+                ps.setString(5, grad);
+                ps.setString(6, ulica);
+                ps.setString(7, broj);
+                
+                ps.executeUpdate();
+                ResultSet rs = ps.getGeneratedKeys();
+                
+                if(rs.next()){
+                    System.out.println("Kreiran je novi Trzni Centar kome je automatski dodeljen Id " + rs.getInt(1));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Primer5.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    ```
+
+### 6. This example demonstrates a more complex SELECT query with joins
+
+- ispis Vlasnika
+  
+    ```java
+    
+ 
+    package vezbe_jdbc_8;
+
+    /**
+     *
+    * @author ziga
+    */
+    import java.sql.*;
+    import java.util.logging.Level;
+    import java.util.logging.Logger;
+
+    public class Primer6 {
+        
+        public static void main(String[] args) {
+            ispisVlasnika();
+        }
+
+        private static void ispisVlasnika() {
+            Connection conn = DB.getInstance().getConnection();
+            if(conn == null) System.out.println("Connection could not be made!");
+            else System.out.println("Connection established!");
+            
+            String query = "Select * from Radnik join Vlasnik on Radnik.BrLicneKarte=Vlasnik.RadnikId";
+            
+            try(
+                PreparedStatement stmt = conn.prepareStatement(query);
+                ResultSet rs = stmt.executeQuery();
+                    ){
+                System.out.println("Vlasnici");
+                while(rs.next()){
+                    System.out.println(rs.getString("Ime")+ rs.getString("Prezime")+ rs.getString("Ulica"));
+                }
+            }catch (SQLException ex) {
+                Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    }
+
+    
+    ```
+
+### 7 - This example demonstrates calling a stored procedure that returns a ResultSet.
+
+- radniciSaImenom
+
+    ```java
+
+    package vezbe_jdbc_8;
+
+    /**
+     *
+     * @author ziga
+     */
+
+    import java.sql.*;
+    import java.util.logging.Level;
+    import java.util.logging.Logger;
+    public class Primer7 {
+        
+        public static void main(String[] args) {
+            radniciSaImenom("Ivan");
+        }
+
+        private static void radniciSaImenom(String ime) {
+            Connection conn = DB.getInstance().getConnection();
+            if(conn==null) System.out.println("Could not connect to DB!");
+            else System.out.println("Connection to db established!");
+            
+            try {
+                // Get a list of procedures
+                DatabaseMetaData dbmd = conn.getMetaData();
+                try(ResultSet rs=dbmd.getProcedures(null, "dbo", null);){
+                    while(rs.next())
+                        System.out.println(rs.getString("PROCEDURE_NAME"));
+                }
+                
+                String query = "{ call SPRadniciSaImenom(?)}";
+                try(CallableStatement cs = conn.prepareCall(query);)
+                {
+                    cs.setString(1, ime);
+                    try(ResultSet rs3 = cs.executeQuery()){
+                        System.out.println("Radnici sa imenom "+ ime);
+                        while(rs3.next()){
+                            System.out.println("BrLicneKarte: "+ rs3.getString("BrLicneKarte"));
+                            System.out.println("Ime: "+ rs3.getString("Ime"));
+                            System.out.println("Prezime: "+ rs3.getString("Prezime"));
+                        }
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Primer7.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+        }
+        
+    }
+
+
+    ```
+
+### 8 - This example shows how to call a stored procedure that has an output parameter
+
+- The procedure is as follows:
+
+    ```sql
+    USE [Trznicentar]
+    GO
+    /****** Object:  StoredProcedure [dbo].[SPBrojRadnikaSaImenom]    Script Date: 6/30/2024 9:22:33 PM ******/
+    SET ANSI_NULLS ON
+    GO
+    SET QUOTED_IDENTIFIER ON
+    GO
+
+    ALTER PROCEDURE [dbo].[SPBrojRadnikaSaImenom]
+        @ime VARCHAR(20),
+        @brojRadnika INT OUTPUT
+    AS
+    BEGIN
+        SET NOCOUNT ON;
+
+        SELECT @brojRadnika = COUNT(*) 
+        FROM Radnik 
+        WHERE Ime = @ime;
+    END;
+
+    ```
+
+    ```java
+    package vezbe_jdbc_8;
+
+    /**
+     *
+     * @author ziga
+     */
+    import java.sql.*;
+    import java.util.logging.Level;
+    import java.util.logging.Logger;
+
+    public class Primer8 {
+        public static void main(String[] args) {
+            int brojRadnika = brojRadnikaSaImenom("Ivan");
+            System.out.println(brojRadnika);
+        }
+
+        private static int brojRadnikaSaImenom(String ime) {
+            
+            Connection conn = DB.getInstance().getConnection();
+            if(conn==null)System.out.println("Connection could not be established!");
+            else System.out.println("Connection Established!");
+            
+            String query = "{ call SPBrojRadnikaSaImenom (?,?)}";
+            
+            try(CallableStatement cs = conn.prepareCall(query)){
+                cs.setString(1, ime);
+                cs.registerOutParameter(2, Types.INTEGER);
+                cs.execute();
+                return cs.getInt(2);
+                
+            }catch (SQLException ex) {
+                Logger.getLogger(DB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return 0;
+        }
+    }
+
+
+    ```
+
+### 9 - This example demonstrates updating rows in a ResultSet using an updatable ResultSet.
+
+- izmenaAdreseVlasnika
+
+```java
+
+
+```
+
+
+- [x] 1 -Testing connection
+
+- [x] 2 - ispisRadnika
 
     This example demonstrates a basic SELECT query with simple data retrieval and output using a ResultSet.
     Concepts: Connection, Statement, ResultSet, ResultSetMetaData.
 
-- [x] spisakTabela
+- [x] 3 - spisakTabela
 
     This example shows how to use DatabaseMetaData to list tables and columns in the database.
     Concepts: Connection, DatabaseMetaData, ResultSet.
 
-- [x] spisakProceduraIFunkcija
+- [x] 4 - spisakProceduraIFunkcija
 
     This example demonstrates how to use DatabaseMetaData to list stored procedures and functions.
     Concepts: Connection, DatabaseMetaData, ResultSet.
 
-- [ ] dodajAdresuSaAutomatskiGenerisanimID
+- [x] 5 - dodajTrzniCentarSaAutomatskiGenerisanimID
 
     This example shows how to insert data into a table and retrieve automatically generated keys.
     Concepts: Connection, PreparedStatement, executeUpdate, getGeneratedKeys.
 
-- [ ] ispisVlasnika
+- [x] 6 - ispisVlasnika
 
     This example demonstrates a more complex SELECT query with joins.
     Concepts: Connection, PreparedStatement, ResultSet.
 
-- [ ] radniciSaImenom
+- [x] radniciSaImenom
 
     This example demonstrates calling a stored procedure that returns a ResultSet.
     Concepts: Connection, CallableStatement, ResultSet.
 
-- [ ] brRadnikaSaImenom
+- [x] brRadnikaSaImenom
 
     This example shows how to call a stored procedure that has an output parameter.
     Concepts: Connection, CallableStatement, registerOutParameter, execute.
