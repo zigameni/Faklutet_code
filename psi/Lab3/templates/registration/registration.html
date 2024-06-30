@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{%  block title %}
+    Register
+{% endblock %}
+
+{%  block content %}
+    <form method="post">
+    
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Register">
+    </form>
+    <br>
+    Imas profil? Uloguj se <a href="{% url 'login' %}">ovde!</a>
+{% endblock %}

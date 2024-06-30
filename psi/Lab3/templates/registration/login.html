@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+
+    <form method="post">
+    {% csrf_token %}
+    {{ form }}
+        <input type="submit" value="Login">
+    </form>
+
+    <br>
+    Nemas profil? Registruj se <a href="{% url 'register' %}">ovde!</a>
+{% endblock %}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>
+        {% block title %}
+            Base Title
+        {% endblock %}
+    </title>
+</head>
+<header style="background-color: yellowgreen; text-align: right">
+    {% block header %}
+        {% if messages %}
+        	
+            {% for message in messages %}
+        	    {{ message }}
+            {% endfor %}
+       
+        {% endif %}
+        
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}"><h4>logout</h4></a>
+            <h1>{{ user }} </h1>
+        {% else %}
+            <a href="{% url 'login' %}"><h4>login </h4></a>
+        {% endif %}
+    {%  endblock %}
+</header>
+
+<body>
+{% block content %}
+    Base Content
+{% endblock %}
+</body>
+</html>
